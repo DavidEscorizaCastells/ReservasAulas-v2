@@ -56,10 +56,17 @@ public class PermanenciaPorTramo extends Permanencia{
 		if (getClass() != obj.getClass())
 			return false;
 		PermanenciaPorTramo other = (PermanenciaPorTramo) obj;
+		if (dia == null) {
+			if (other.dia != null)
+				return false;
+		} else if (!dia.equals(other.dia))
+			return false;
 		if (tramo != other.tramo)
 			return false;
 		return true;
 	}
+	
+	
 
 	@Override
 	public String toString() {

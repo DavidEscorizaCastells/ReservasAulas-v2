@@ -76,12 +76,6 @@ public class PermanenciaPorHora extends Permanencia {
 		} catch (DateTimeParseException e) {
 			throw new IllegalArgumentException ("El formato de la hora de la permanencia no es correcto.");
 		}
-		
-		/*try {
-			dia = LocalDate.parse(fecha, FORMATO_DIA);
-		} catch (DateTimeParseException e) {
-			throw new IllegalArgumentException("El formato del día de la permanencia no es correcto.");
-		}*/
 	}
 	
 	public int getPuntos() {
@@ -105,10 +99,12 @@ public class PermanenciaPorHora extends Permanencia {
 		if (getClass() != obj.getClass())
 			return false;
 		PermanenciaPorHora other = (PermanenciaPorHora) obj;
-		if (hora == null) {
-			if (other.hora != null)
+		if (dia == null) {
+			if (other.dia != null)
 				return false;
-		} else if (!hora.equals(other.hora))
+		} else if (!dia.equals(other.dia))
+			return false;
+		if (hora != other.hora)
 			return false;
 		return true;
 	}
