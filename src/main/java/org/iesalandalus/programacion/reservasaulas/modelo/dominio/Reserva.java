@@ -1,6 +1,8 @@
 package org.iesalandalus.programacion.reservasaulas.modelo.dominio;
 
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.Permanencia;
+import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.PermanenciaPorHora;
+import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.PermanenciaPorTramo;
 
 public class Reserva {
 	private Profesor profesor;
@@ -45,13 +47,32 @@ public class Reserva {
 	}
 
 	public Permanencia getPermanencia() {
-		return new Permanencia(permanencia);
+		Permanencia nuevaPermanencia=null;
+		
+		if (permanencia instanceof PermanenciaPorHora )
+			nuevaPermanencia= new PermanenciaPorHora((PermanenciaPorHora)permanencia);
+		else if (permanencia instanceof PermanenciaPorTramo)
+			nuevaPermanencia=new PermanenciaPorTramo((PermanenciaPorTramo)permanencia);
+		
+		return nuevaPermanencia;
 	}
 
 	private void setPermanencia(Permanencia permanencia) {
+		Permanencia nuevaPermanencia=null;
+		
 		if (permanencia==null)
 			throw new IllegalArgumentException ("La reserva se debe hacer para una permanencia concreta.");
-		this.permanencia = new Permanencia(permanencia);
+		
+		if (permanencia instanceof PermanenciaPorHora )
+			nuevaPermanencia= new PermanenciaPorHora((PermanenciaPorHora)permanencia);
+		else if (permanencia instanceof PermanenciaPorTramo)
+			nuevaPermanencia=new PermanenciaPorTramo((PermanenciaPorTramo)permanencia);
+		
+		this.permanencia = nuevaPermanencia;
+	}
+	
+	public float getPuntos() {
+		return aula.getPuntos()+permanencia.getPuntos();
 	}
 
 	@Override
@@ -87,7 +108,7 @@ public class Reserva {
 
 	@Override
 	public String toString() {
-		return "[profesor=" + profesor.toString() + ", aula=" + aula.toString() + ", permanencia=" + permanencia.toString() + "]";
+		return "[profesor=" + profesor.toString() + ", aula=" + aula.toString() + ", permanencia=" + permanencia.toString() + ", puntos="+getPuntos()+"]";
 	}
 	
 	
