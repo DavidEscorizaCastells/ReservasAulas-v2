@@ -22,7 +22,6 @@ public class PermanenciaPorTramo extends Permanencia{
 		
 		super.setDia(otraPermanenciaPorTramo.dia);
 		setTramo(otraPermanenciaPorTramo.tramo);
-		//new PermanenciaPorTramo(super.getDia(), otraPermanenciaPorTramo.getTramo());
 	}
 	
 	public Tramo getTramo() {
