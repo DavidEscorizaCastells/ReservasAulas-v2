@@ -1,15 +1,20 @@
 package org.iesalandalus.programacion.reservasaulas.vista;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.Aula;
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.Profesor;
+import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.Permanencia;
+import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.PermanenciaPorHora;
+import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.PermanenciaPorTramo;
 import org.iesalandalus.programacion.reservasaulas.modelo.dominio.permanencia.Tramo;
 import org.iesalandalus.programacion.utilidades.Entrada;
 
 public class Consola {
-	private static final DateTimeFormatter FORMATO_DIA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	
 	
 	private Consola() {}
 	
@@ -36,7 +41,10 @@ public class Consola {
 	}
 	
 	public static Aula leerAula() {		
-		return new Aula(leerNombreAula());
+		String aula=leerNombreAula();
+		System.out.print("Introduce cantidad de puestos: ");
+		int puestos=Entrada.entero();
+		return new Aula(aula, puestos);
 	}
 	
 	public static String leerNombreAula() {
@@ -74,39 +82,49 @@ public class Consola {
 			return Tramo.TARDE;		
 	}
 	
-	public static LocalDate leerDia() {
-		int year, mes, dia;
-		
-		do {
-			System.out.print("Indroduce año: ");
-			year=Entrada.entero();
-		} while (year<2019);
-		
-		do {
-			System.out.print("Introduce mes (1-12): ");
-			mes=Entrada.entero();
-		} while (mes<1 || mes>12);
-		
-		int mayorDia=0;
-		switch (mes) {
-			case 1: case 3: case 5: case 7: case 8: case 10: case 12:
-				mayorDia=31;
-				break;
-			case 4: case 6: case 9: case 11:
-				mayorDia=30;
-				break;
-			case 2:
-				if (year%400==0 || year%4==0 && year%100!=0)
-					mayorDia=29;
-				else
-					mayorDia=28;	
+	public static String leerDia() {
+		final DateTimeFormatter FORMATO_DIA = DateTimeFormatter.ofPattern("dd/MM/yyyy");;
+		System.out.print("Escribe fecha para la reserva: ");
+		String dia=Entrada.cadena();
+		try {
+			LocalDate.parse(dia, FORMATO_DIA);
+		} catch (DateTimeParseException e) {
+			throw new IllegalArgumentException("El formato del día de la permanencia no es correcto.");
 		}
-		
-		do {
-			System.out.println("Introduce dia válido para el mes: ");
-			dia=Entrada.entero();
-		} while (dia<1 || dia>mayorDia);
+		return dia;
+	}
 	
-		return LocalDate.of(year, mes, dia);
-	}	
+	public static String leerHora() {
+		final DateTimeFormatter FORMATO_HORA=DateTimeFormatter.ofPattern("HH:mm");
+		System.out.print("Escribe hora para la reserva: ");
+		String hora=Entrada.cadena();
+		try {
+			LocalTime.parse(hora, FORMATO_HORA);
+		} catch (DateTimeParseException e) {
+			throw new IllegalArgumentException ("El formato de la hora de la permanencia no es correcto.");
+		}
+		return hora;
+	}
+	
+	public static Permanencia leerPermanencia() {
+		if (elegirPermanencia()==1)
+			return new PermanenciaPorHora(leerDia(),leerHora());
+		else
+			return new PermanenciaPorTramo(leerDia(),leerTramo());
+	}
+	
+	public static int elegirPermanencia() {
+		System.out.println("Tipo de permanencia:");
+		System.out.println("1. Por hora.");
+		System.out.println("2. Por tramo");
+		int tipo;	
+		do {
+			System.out.print("Elige tipo: ");
+			tipo=Entrada.entero();			
+		} while (tipo!=1 && tipo!=2);
+			
+			
+		return tipo;
+		
+	}
 }

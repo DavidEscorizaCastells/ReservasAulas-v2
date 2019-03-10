@@ -37,7 +37,7 @@ public class Profesor {
 			throw new IllegalArgumentException ("El nombre del profesor no puede ser nulo.");
 		}
 		if (nombre.trim().equals("")) {
-			throw new IllegalArgumentException ("El nombre del profesor no puede estar vacÌo.");
+			throw new IllegalArgumentException ("El nombre del profesor no puede estar vac√≠o.");
 		}
 		this.nombre = nombre;
 	}
@@ -51,7 +51,7 @@ public class Profesor {
 			throw new IllegalArgumentException ("El correo del profesor no puede ser nulo.");
 		}
 		if (!correo.matches(ER_CORREO)) {
-			throw new IllegalArgumentException ("El correo del profesor no es v·lido.");
+			throw new IllegalArgumentException ("El correo del profesor no es v√°lido.");
 		}
 		this.correo = correo;
 	}
@@ -65,7 +65,7 @@ public class Profesor {
 			this.telefono=telefono;}
 		else {
 			if (!telefono.matches(ER_TELEFONO)) {
-				throw new IllegalArgumentException ("El telÈfono del profesor no es v·lido.");
+				throw new IllegalArgumentException ("El tel√©fono del profesor no es v√°lido.");
 			}
 		}
 	}
